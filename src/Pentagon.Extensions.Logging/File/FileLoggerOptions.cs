@@ -3,7 +3,7 @@
 
     public class FileLoggerOptions
     {
-        public LogLevel LogLevel { get; set; } = LogLevel.Information;
+        public LogLevel LogLevel { get; set; } = LogLevel.Information; // TODO make it work with general options
         
         public string GroupDirectoryTreeFormat { get; set; } 
 

@@ -114,6 +114,6 @@ namespace Pentagon.Extensions.Logging
                 [CallerFilePath] string filePath = "",
                 [CallerLineNumber] int lineNumber = 0,
                 params object[] args)
-            => logger.Log(LogLevel.Debug, eventId, args.Prepend(new object[] { origin, filePath, lineNumber, message }), exception, LoggerSourceFormatter.Format);
+            => logger.Log(LogLevel.Trace, eventId, args.Prepend(new object[] { origin, filePath, lineNumber, message }), exception, LoggerSourceFormatter.Format);
     }
 }
