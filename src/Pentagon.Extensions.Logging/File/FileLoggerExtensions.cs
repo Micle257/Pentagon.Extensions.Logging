@@ -9,6 +9,7 @@
         public static ILoggingBuilder AddFile(this ILoggingBuilder builder)
         {
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, FileLoggerProvider>());
+            builder.Services.AddTransient<IFileAsyncWriter, FileAsyncWriter>();
 
             return builder;
         }

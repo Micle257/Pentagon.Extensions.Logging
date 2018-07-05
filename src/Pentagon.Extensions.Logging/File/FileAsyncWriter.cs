@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
 
-    public class FileAsyncWriter : IFileAsyncWriter
+    public class FileAsyncWriter : IFileAsyncWriter, IDisposable
     {
         FileLoggerOptions _options;
         readonly Task _task;
