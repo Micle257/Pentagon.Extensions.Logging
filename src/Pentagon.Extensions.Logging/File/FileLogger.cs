@@ -9,36 +9,56 @@ namespace Pentagon.Extensions.Logging.File
     using System;
     using System.Text;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions.Internal;
     using Microsoft.Extensions.Options;
 
-    public class FileLogger : ILogger, IDisposable
+    public class FileLogger : ILogger
     {
         readonly IFileAsyncWriter _fileWriter;
-        readonly string _categoryName;
 
-        FileLoggerOptions _options;
-        readonly IDisposable _optionsReloadToken;
-
-        public FileLogger(IFileAsyncWriter fileWriter, string categoryName, IOptionsMonitor<FileLoggerOptions> options)
+        public FileLogger()
         {
+
+        }
+        
+        internal FileLogger(string name, Func<string, LogLevel, bool> filter, IExternalScopeProvider scopeProvider,IFileAsyncWriter fileWriter )
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             _fileWriter = fileWriter;
-            _categoryName = categoryName;
 
-            _optionsReloadToken = options.OnChange(ReloadLoggerOptions);
-            ReloadLoggerOptions(options.CurrentValue);
+            Filter = filter ?? ((c, l) => true);
+            ScopeProvider = scopeProvider;
         }
 
-        /// <inheritdoc />
-        public void Dispose()
+        public bool IncludeScopes { get; }
+
+        internal IExternalScopeProvider ScopeProvider { get; set; }
+
+        private Func<string, LogLevel, bool> _filter;
+        public Func<string, LogLevel, bool> Filter
         {
-            _optionsReloadToken?.Dispose();
+            get => _filter;
+            set
+            {
+                _filter = value ?? throw new ArgumentNullException(nameof(value));
+            }
         }
 
+        public string Name { get;  }
+        
         /// <inheritdoc />
-        public IDisposable BeginScope<TState>(TState state) => null;
+        public IDisposable BeginScope<TState>(TState state) => ScopeProvider?.Push(state) ?? NullScope.Instance;
 
         /// <inheritdoc />
-        public bool IsEnabled(LogLevel logLevel) => logLevel >= _options.LogLevel;
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            if (logLevel == LogLevel.None)
+            {
+                return false;
+            }
+
+            return Filter(Name, logLevel);
+        }
 
         /// <inheritdoc />
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -46,21 +66,24 @@ namespace Pentagon.Extensions.Logging.File
             if (!IsEnabled(logLevel))
                 return;
 
+            if (formatter == null)
+                throw new ArgumentNullException(nameof(formatter));
+
             var currentTime = DateTimeOffset.Now;
 
             var logMessage = new StringBuilder();
 
-            if (_options.IncludeTimeStamp)
+            if (IncludeTimeStamp)
                 logMessage.Append($"{currentTime:yyyy-MM-dd HH:mm:ss.fffff} ");
 
             logMessage.Append($"[{logLevel}] ");
 
-            if (_options.IncludeCategory)
-                logMessage.Append($"{_categoryName}[{eventId.Id}]: ");
+            if (IncludeCategory)
+                logMessage.Append($"{Name}[{eventId.Id}]: ");
 
             var message = formatter(state, exception);
 
-            message = LoggerSourceFormatter.GetOffsetLines(message, _options.IndentMultiLinesFormat);
+            message = LoggerSourceFormatter.GetOffsetLines(message, IndentMultiLinesFormat);
 
             logMessage.Append(message);
 
@@ -71,9 +94,10 @@ namespace Pentagon.Extensions.Logging.File
             _fileWriter.AddMessage(currentTime, output);
         }
 
-        void ReloadLoggerOptions(FileLoggerOptions options)
-        {
-            _options = options;
-        }
+        public string IndentMultiLinesFormat { get; set; }
+
+        public bool IncludeCategory { get; set; }
+
+        public bool IncludeTimeStamp { get; set; }
     }
 }

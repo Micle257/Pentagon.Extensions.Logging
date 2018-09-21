@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
 
-    public class FileAsyncWriter : IFileAsyncWriter, IDisposable
+    public class FileAsyncWriter : IFileAsyncWriter
     {
         FileLoggerOptions _options;
         readonly Task _task;
@@ -22,7 +22,7 @@
         IDictionary<DateTime, IList<int>> _fileVersionMap = new ConcurrentDictionary<DateTime, IList<int>>();
         readonly IDisposable _optionsReloadToken;
 
-        public FileAsyncWriter(IOptionsMonitor<FileLoggerOptions> options)
+        public FileAsyncWriter(FileLoggerOptions options, Action<FileLoggerOptions> onChangeCallback)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));

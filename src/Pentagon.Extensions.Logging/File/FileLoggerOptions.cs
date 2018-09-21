@@ -20,5 +20,7 @@
         public int LogFileWriteInterval { get; set; } = 1000;
 
         public string IndentMultiLinesFormat { get; set; } = "  >";
+        
+        public bool IncludeScopes { get; set; }
     }
 }
