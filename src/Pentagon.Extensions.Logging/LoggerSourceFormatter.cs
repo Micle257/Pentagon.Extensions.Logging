@@ -16,15 +16,17 @@ namespace Pentagon.Extensions.Logging
     {
         public static string Format(IEnumerable<object> state, Exception exception)
         {
-            if (!LoggerState.TryParse(state, out var logState))
-                throw new ArgumentException("Log state is invalid.");
+            if (!LoggerState.TryParse(state, out var logState, out var otherState))
+                throw new ArgumentException();
 
-            return GetLogMessage(logState, exception);
+            var msg = GetLogMessage(logState, otherState, exception);
+
+            return GetOffsetLines(msg, "  >");
         }
 
         public static string GetOffsetLines(string value, string offsetFormat)
         {
-            var lines = value.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+            var lines = value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             if (lines.Length > 1)
             {
@@ -44,7 +46,7 @@ namespace Pentagon.Extensions.Logging
             return value;
         }
 
-        public static string GetLogMessage(LoggerState state, Exception exception = null)
+        public static string GetLogMessage(LoggerState state, object[] otherState, Exception exception = null)
         {
             var messageBuilder = new StringBuilder();
 
@@ -56,10 +58,22 @@ namespace Pentagon.Extensions.Logging
                 && !string.IsNullOrWhiteSpace(state.MethodName)
                 && state.LineNumber.HasValue
                 && !(state.LineNumber <= 0))
+            {
                 messageBuilder.Append($" [{Path.GetFileName(state.FilePath)} > {state.MethodName}() > Line {state.LineNumber}]");
+            }
+
+            if (otherState != null && otherState.Length != 0)
+            {
+                foreach (var o in otherState)
+                {
+                    messageBuilder.Append(o as string ?? (o?.ToString() ?? string.Empty));
+                }
+            }
 
             if (exception != null)
+            {
                 messageBuilder.Append($"{Environment.NewLine}{exception}");
+            }
 
             var message = messageBuilder.ToString();
 
