@@ -20,13 +20,16 @@ namespace Pentagon.Extensions.Logging
 
         public string Message { get; set; }
 
-        public static bool TryParse(IEnumerable<object> value, out LoggerState state)
+        public static bool TryParse(IEnumerable<object> value, out LoggerState state, out object[] otherState)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            state = default;
+            state = default(LoggerState);
+            otherState = Array.Empty<object>();
+
             var logState = new LoggerState();
+            var otherStateBuilder = new List<object>();
 
             using (var enumerator = value.GetEnumerator())
             {
@@ -49,9 +52,16 @@ namespace Pentagon.Extensions.Logging
                     logState.Message = enumerator.Current as string;
                 else
                     return false;
+
+                while (enumerator.MoveNext())
+                {
+                    otherStateBuilder.Add(enumerator.Current);
+                }
             }
 
             state = logState;
+            otherState = otherStateBuilder.ToArray();
+
             return true;
         }
 
@@ -60,7 +70,7 @@ namespace Pentagon.Extensions.Logging
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            if (!TryParse(value, out var state))
+            if (!TryParse(value, out var state, out var other))
                 throw new FormatException(message: "The format value of state is not valid");
 
             return state;
@@ -71,11 +81,11 @@ namespace Pentagon.Extensions.Logging
                                                       [CallerFilePath] string filePath = "",
                                                       [CallerLineNumber] int lineNumber = 0)
             => new LoggerState
-               {
-                       MethodName = origin,
-                       FilePath = filePath,
-                       LineNumber = lineNumber,
-                       Message = message
-               };
+            {
+                MethodName = origin,
+                FilePath = filePath,
+                LineNumber = lineNumber,
+                Message = message
+            };
     }
 }
