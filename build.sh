@@ -1,0 +1,1 @@
+sh /c/Users/Michal/Source/GitHub/build.sh Pentagon.Extensions.Logging Pentagon.Extensions.Logging
