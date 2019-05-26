@@ -14,6 +14,10 @@ namespace Pentagon.Extensions.Logging
 
     public static class LoggerSourceFormatter
     {
+        internal static bool SuppressSource { get; set; }
+
+        internal static string OffsetLinePrepend { get; set; } = "  >";
+
         public static string Format(IEnumerable<object> state, Exception exception)
         {
             if (!LoggerState.TryParse(state, out var logState, out var otherState))
@@ -21,12 +25,12 @@ namespace Pentagon.Extensions.Logging
 
             var msg = GetLogMessage(logState, otherState, exception);
 
-            return GetOffsetLines(msg, "  >");
+            return GetOffsetLines(msg, OffsetLinePrepend);
         }
 
         public static string GetOffsetLines(string value, string offsetFormat)
         {
-            var lines = value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var lines = value.SplitToLines().ToArray();
 
             if (lines.Length > 1)
             {
@@ -54,26 +58,21 @@ namespace Pentagon.Extensions.Logging
                                           ? "No message specified."
                                           : state.Message);
 
-            if (!string.IsNullOrWhiteSpace(state.FilePath)
+            if (!SuppressSource
+                && !string.IsNullOrWhiteSpace(state.FilePath)
                 && !string.IsNullOrWhiteSpace(state.MethodName)
                 && state.LineNumber.HasValue
                 && !(state.LineNumber <= 0))
-            {
                 messageBuilder.Append($" [{Path.GetFileName(state.FilePath)} > {state.MethodName}() > Line {state.LineNumber}]");
-            }
 
-            if (otherState != null && otherState.Length != 0)
+            if (otherState.Length != 0)
             {
                 foreach (var o in otherState)
-                {
                     messageBuilder.Append(o as string ?? (o?.ToString() ?? string.Empty));
-                }
             }
 
             if (exception != null)
-            {
                 messageBuilder.Append($"{Environment.NewLine}{exception}");
-            }
 
             var message = messageBuilder.ToString();
 

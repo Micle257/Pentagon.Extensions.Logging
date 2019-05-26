@@ -1,6 +1,12 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿// -----------------------------------------------------------------------
+//  <copyright file="ColoredConsoleLoggerExtensions.cs">
+//   Copyright (c) Michal Pokorný. All Rights Reserved.
+//  </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pentagon.Extensions.Logging.ColoredConsole
+{
     using System;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     public static class ColoredConsoleLoggerExtensions

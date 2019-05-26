@@ -25,7 +25,7 @@ namespace Pentagon.Extensions.Logging
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            state = default(LoggerState);
+            state = default;
             otherState = Array.Empty<object>();
 
             var logState = new LoggerState();
@@ -54,9 +54,7 @@ namespace Pentagon.Extensions.Logging
                     return false;
 
                 while (enumerator.MoveNext())
-                {
                     otherStateBuilder.Add(enumerator.Current);
-                }
             }
 
             state = logState;
@@ -81,11 +79,11 @@ namespace Pentagon.Extensions.Logging
                                                       [CallerFilePath] string filePath = "",
                                                       [CallerLineNumber] int lineNumber = 0)
             => new LoggerState
-            {
-                MethodName = origin,
-                FilePath = filePath,
-                LineNumber = lineNumber,
-                Message = message
-            };
+               {
+                       MethodName = origin,
+                       FilePath = filePath,
+                       LineNumber = lineNumber,
+                       Message = message
+               };
     }
 }
