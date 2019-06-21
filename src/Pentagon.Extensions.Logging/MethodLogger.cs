@@ -33,27 +33,25 @@ namespace Pentagon.Extensions.Logging
             _fileName = Path.GetFileName(typePath);
             _trace = Guid.NewGuid();
 
-            if (Options.HasFlag(MethodLogOptions.ExecutionTime))
+            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
             {
                 _sw = new Stopwatch();
                 _sw.Start();
             }
 
-            if (Options.HasFlag(MethodLogOptions.Entry))
+            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Entry))
                 _logger.LogTraceSource($"Begin of method '{methodName}' in file '{_fileName}'{info}.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
         }
 
-        internal static MethodLogOptions Options { get; set; }
-
         public void Dispose()
         {
-            if (Options.HasFlag(MethodLogOptions.ExecutionTime))
+            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
             {
                 _sw.Stop();
                 _logger.LogTraceSource($"Method '{_methodName}' finished in {_sw.Elapsed}.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
             }
 
-            if (Options.HasFlag(MethodLogOptions.Exit))
+            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Exit))
                 _logger.LogTraceSource($"End of method '{_methodName}' in file '{_fileName}'.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
         }
 

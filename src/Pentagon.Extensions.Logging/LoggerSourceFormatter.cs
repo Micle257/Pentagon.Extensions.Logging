@@ -14,10 +14,6 @@ namespace Pentagon.Extensions.Logging
 
     public static class LoggerSourceFormatter
     {
-        internal static bool SuppressSource { get; set; }
-
-        internal static string OffsetLinePrepend { get; set; } = "  >";
-
         public static string Format(IEnumerable<object> state, Exception exception)
         {
             if (!LoggerState.TryParse(state, out var logState, out var otherState))
@@ -25,7 +21,7 @@ namespace Pentagon.Extensions.Logging
 
             var msg = GetLogMessage(logState, otherState, exception);
 
-            return GetOffsetLines(msg, OffsetLinePrepend);
+            return GetOffsetLines(msg, StaticLoggingOptions.OffsetLinePrepend);
         }
 
         public static string GetOffsetLines(string value, string offsetFormat)
@@ -58,7 +54,7 @@ namespace Pentagon.Extensions.Logging
                                           ? "No message specified."
                                           : state.Message);
 
-            if (!SuppressSource
+            if (!StaticLoggingOptions.SuppressSource
                 && !string.IsNullOrWhiteSpace(state.FilePath)
                 && !string.IsNullOrWhiteSpace(state.MethodName)
                 && state.LineNumber.HasValue
