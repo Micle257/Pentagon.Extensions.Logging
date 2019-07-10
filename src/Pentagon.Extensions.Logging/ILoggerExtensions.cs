@@ -15,11 +15,11 @@ namespace Pentagon.Extensions.Logging
     public static class ILoggerExtensions
     {
         public static IDisposable LogMethod(this ILogger logger,
-                                            string info = null,
+                                            object input = null,
                                             [CallerMemberName] string methodName = null,
                                             [CallerFilePath] string typePath = null,
                                             [CallerLineNumber] int lineNumber = 0) =>
-                MethodLogger.Log(logger, info, methodName, typePath, lineNumber);
+                MethodLogger.Log(logger, input, methodName, typePath, lineNumber);
 
         public static void LogSource(
                 this ILogger logger,
