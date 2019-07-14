@@ -31,7 +31,7 @@ namespace Pentagon.Extensions.Logging
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            if (items == null)
+            if (items == null || items.Length == 0)
                 throw new ArgumentNullException(nameof(items));
 
             var data = items.ToDictionary(a => a.key, a => a.value);
