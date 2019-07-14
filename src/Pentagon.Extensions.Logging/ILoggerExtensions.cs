@@ -30,7 +30,7 @@ namespace Pentagon.Extensions.Logging
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
-
+            
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 

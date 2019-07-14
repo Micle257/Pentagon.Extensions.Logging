@@ -34,6 +34,9 @@ namespace Pentagon.Extensions.Logging
             _fileName = Path.GetFileName(typePath);
             _trace = Guid.NewGuid();
 
+            if (StaticLoggingOptions.Options == 0)
+                return;
+
             _loggerScope = _logger.InScope(("MethodName", _methodName), ("MethodTrace", _trace), ("MethodFilePath", _typePath), ("MethodInfo", info));
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
