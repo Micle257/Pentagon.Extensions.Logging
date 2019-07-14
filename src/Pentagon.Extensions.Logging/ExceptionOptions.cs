@@ -1,7 +1,14 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿// -----------------------------------------------------------------------
+//  <copyright file="ExceptionOptions.cs">
+//   Copyright (c) Michal Pokorný. All Rights Reserved.
+//  </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pentagon.Extensions.Logging
+{
     public struct ExceptionOptions
     {
-        public static readonly ExceptionOptions Default = new ExceptionOptions()
+        public static readonly ExceptionOptions Default = new ExceptionOptions
                                                           {
                                                                   CurrentIndentLevel = 0,
                                                                   IndentSpaces = 4,
@@ -10,17 +17,17 @@
 
         internal ExceptionOptions(ExceptionOptions options, int currentIndent)
         {
-            this.CurrentIndentLevel = currentIndent;
-            this.IndentSpaces = options.IndentSpaces;
-            this.OmitNullProperties = options.OmitNullProperties;
+            CurrentIndentLevel = currentIndent;
+            IndentSpaces = options.IndentSpaces;
+            OmitNullProperties = options.OmitNullProperties;
         }
-
-        internal string Indent { get { return new string(' ', this.IndentSpaces * this.CurrentIndentLevel); } }
-
-        internal int CurrentIndentLevel { get; set; }
 
         public int IndentSpaces { get; set; }
 
         public bool OmitNullProperties { get; set; }
+
+        internal string Indent => new string(' ', IndentSpaces * CurrentIndentLevel);
+
+        internal int CurrentIndentLevel { get; set; }
     }
 }

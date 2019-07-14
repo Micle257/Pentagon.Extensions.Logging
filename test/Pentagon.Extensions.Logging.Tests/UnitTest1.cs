@@ -1,14 +1,20 @@
-using Xunit;
+// -----------------------------------------------------------------------
+//  <copyright file="UnitTest1.cs">
+//   Copyright (c) Michal Pokorný. All Rights Reserved.
+//  </copyright>
+// -----------------------------------------------------------------------
 
 namespace Pentagon.Extensions.Logging.Tests
 {
     using System.IO;
     using System.Text;
     using Exceptions;
+    using global::Serilog;
+    using global::Serilog.Core;
+    using global::Serilog.Events;
+    using global::Serilog.Formatting;
     using Serilog;
-    using Serilog.Core;
-    using Serilog.Events;
-    using Serilog.Formatting;
+    using Xunit;
     using Xunit.Abstractions;
 
     public class UnitTest1
@@ -25,21 +31,21 @@ namespace Pentagon.Extensions.Logging.Tests
         {
             var f = new Foo();
 
-            f.DoDoing(2, "sad");
+            f.DoDoing(2, nos: "sad");
         }
 
         [Fact]
         public void Test2()
         {
-            Log.Logger = LoggerCallerEnrichmentConfiguration.WithCaller(new LoggerConfiguration()
-                                            .MinimumLevel.Verbose()
-                                            .Enrich)
+            Log.Logger = new LoggerConfiguration()
+                         .MinimumLevel.Verbose()
+                         .Enrich.WithCaller()
                          .Enrich.WithDemystifiedException()
                          .WriteTo.Sink(new Sink(_outputHelper, new NewLineOffsetFormatter()))
-                    .CreateLogger();
+                         .CreateLogger();
 
-            Log.Debug("test\ndsa\nqe");
-            Log.Debug(new CryptographicException("sa"), "DESCRITON {B}", 15);
+            Log.Debug(messageTemplate: "test\ndsa\nqe");
+            Log.Debug(new CryptographicException(message: "sa"), messageTemplate: "DESCRITON {B}", 15);
         }
 
         class Sink : ILogEventSink

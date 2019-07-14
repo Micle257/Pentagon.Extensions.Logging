@@ -1,4 +1,11 @@
-﻿namespace Pentagon.Extensions.Logging.Serilog {
+﻿// -----------------------------------------------------------------------
+//  <copyright file="NewLineOffsetFormatter.cs">
+//   Copyright (c) Michal Pokorný. All Rights Reserved.
+//  </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pentagon.Extensions.Logging.Serilog
+{
     using System;
     using System.IO;
     using System.Linq;
@@ -8,16 +15,17 @@
     using global::Serilog.Formatting.Display;
     using JetBrains.Annotations;
 
-    [Obsolete("WIP")]
+    [Obsolete(message: "WIP")]
     public class NewLineOffsetFormatter : ITextFormatter
     {
         [NotNull]
         readonly ITextFormatter _formatter;
+
         readonly string _offsetFormat;
 
         public NewLineOffsetFormatter(string offsetFormat = null, ITextFormatter formatter = null)
         {
-            _formatter = formatter ?? new MessageTemplateTextFormatter("[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}", null);
+            _formatter = formatter ?? new MessageTemplateTextFormatter(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}", null);
             _offsetFormat = offsetFormat ?? "  > ";
         }
 

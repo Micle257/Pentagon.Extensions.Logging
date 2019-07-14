@@ -3,7 +3,9 @@
 //   Copyright (c) Michal Pokorný. All Rights Reserved.
 //  </copyright>
 // -----------------------------------------------------------------------
-namespace Pentagon.Extensions.Logging.Tests {
+
+namespace Pentagon.Extensions.Logging.Tests
+{
     using System;
     using Microsoft.Extensions.Logging;
     using Moq;
@@ -20,13 +22,13 @@ namespace Pentagon.Extensions.Logging.Tests {
         [Fact]
         public void InScope_SecondArgumentIsNotSpecified_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => ILoggerExtensions.InScope(Mock.Of<ILogger>()));
+            Assert.Throws<ArgumentNullException>(() => Mock.Of<ILogger>().InScope());
         }
 
         [Fact]
         public void InScope_SecondArgumentIsNull_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => ILoggerExtensions.InScope(Mock.Of<ILogger>(), null));
+            Assert.Throws<ArgumentNullException>(() => Mock.Of<ILogger>().InScope(null));
         }
     }
 }

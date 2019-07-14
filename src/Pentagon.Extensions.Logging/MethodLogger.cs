@@ -9,14 +9,11 @@ namespace Pentagon.Extensions.Logging
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
-    using System.Reflection;
     using System.Runtime.CompilerServices;
     using Microsoft.Extensions.Logging;
 
     public class MethodLogger : IDisposable
     {
-        IDisposable _loggerScope;
         readonly ILogger _logger;
         readonly object _info;
         readonly string _methodName;
@@ -24,6 +21,7 @@ namespace Pentagon.Extensions.Logging
         readonly Stopwatch _sw;
         readonly string _fileName;
         readonly Guid _trace;
+        readonly IDisposable _loggerScope;
 
         MethodLogger(ILogger logger, object info, string methodName, string typePath)
         {
@@ -46,7 +44,7 @@ namespace Pentagon.Extensions.Logging
             }
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Entry))
-                _logger.LogTrace("Begin of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
+                _logger.LogTrace(message: "Begin of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
         }
 
         public void Dispose()
@@ -54,25 +52,21 @@ namespace Pentagon.Extensions.Logging
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
             {
                 _sw?.Stop();
-                _logger.LogTrace("Method '{MethodName}' finished in {TimeElapsed}.", _methodName, _sw.Elapsed);
+                _logger.LogTrace(message: "Method '{MethodName}' finished in {TimeElapsed}.", _methodName, _sw.Elapsed);
             }
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Exit) && !StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
-                _logger.LogTrace("End of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
+                _logger.LogTrace(message: "End of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
 
             _loggerScope?.Dispose();
         }
 
-        /// <summary>
-        /// Log method entry
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="info">The information.</param>
-        /// <param name="methodName">The name of the method being logged</param>
-        /// <param name="typePath">The type path.</param>
-        /// <returns>
-        /// A disposable object or none if logging is disabled.
-        /// </returns>
+        /// <summary> Log method entry </summary>
+        /// <param name="logger"> The logger. </param>
+        /// <param name="info"> The information. </param>
+        /// <param name="methodName"> The name of the method being logged </param>
+        /// <param name="typePath"> The type path. </param>
+        /// <returns> A disposable object or none if logging is disabled. </returns>
         public static IDisposable Log(ILogger logger,
                                       object info = null,
                                       [CallerMemberName] string methodName = null,

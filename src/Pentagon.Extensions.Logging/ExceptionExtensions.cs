@@ -1,8 +1,14 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿// -----------------------------------------------------------------------
+//  <copyright file="ExceptionExtensions.cs">
+//   Copyright (c) Michal Pokorný. All Rights Reserved.
+//  </copyright>
+// -----------------------------------------------------------------------
+
+namespace Pentagon.Extensions.Logging
+{
     using System;
     using System.Collections;
     using System.Linq;
-    using System.Reflection;
     using System.Text;
 
     public static class ExceptionExtensions
@@ -21,13 +27,13 @@
 
             AppendValue(stringBuilder, propertyName: "Type", exception.GetType().FullName, options);
 
-            foreach (PropertyInfo property in exception
-                                              .GetType()
-                                              .GetProperties()
-                                              .OrderByDescending(x => string.Equals(x.Name, nameof(exception.Message), StringComparison.Ordinal))
-                                              .ThenByDescending(x => string.Equals(x.Name, nameof(exception.Source), StringComparison.Ordinal))
-                                              .ThenBy(x => string.Equals(x.Name, nameof(exception.InnerException), StringComparison.Ordinal))
-                                              .ThenBy(x => string.Equals(x.Name, nameof(AggregateException.InnerExceptions), StringComparison.Ordinal)))
+            foreach (var property in exception
+                                     .GetType()
+                                     .GetProperties()
+                                     .OrderByDescending(x => string.Equals(x.Name, nameof(exception.Message), StringComparison.Ordinal))
+                                     .ThenByDescending(x => string.Equals(x.Name, nameof(exception.Source), StringComparison.Ordinal))
+                                     .ThenBy(x => string.Equals(x.Name, nameof(exception.InnerException), StringComparison.Ordinal))
+                                     .ThenBy(x => string.Equals(x.Name, nameof(AggregateException.InnerExceptions), StringComparison.Ordinal)))
             {
                 var value = property.GetValue(exception, null);
                 if (value == null && options.OmitNullProperties)
@@ -104,7 +110,7 @@
         {
             if (value is DictionaryEntry)
             {
-                DictionaryEntry dictionaryEntry = (DictionaryEntry) value;
+                var dictionaryEntry = (DictionaryEntry) value;
                 stringBuilder.AppendLine($"{options.Indent}{propertyName} = {dictionaryEntry.Key} : {dictionaryEntry.Value}");
             }
             else if (value is Exception)
