@@ -1,7 +1,7 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿namespace Pentagon.Extensions.Logging.Serilog {
     using System.Diagnostics;
-    using Serilog.Core;
-    using Serilog.Events;
+    using global::Serilog.Core;
+    using global::Serilog.Events;
 
     public class DemystifyExceptionEnricher : ILogEventEnricher
     {

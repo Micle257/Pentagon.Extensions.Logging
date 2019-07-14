@@ -1,6 +1,6 @@
-﻿namespace Pentagon.Extensions.Logging {
-    using Serilog;
-    using Serilog.Configuration;
+﻿namespace Pentagon.Extensions.Logging.Serilog {
+    using global::Serilog;
+    using global::Serilog.Configuration;
 
     public static class LoggerCallerEnrichmentConfiguration
     {

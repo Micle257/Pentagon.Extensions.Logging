@@ -1,9 +1,9 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿namespace Pentagon.Extensions.Logging.Serilog {
     using System.Diagnostics;
     using System.Linq;
-    using Serilog;
-    using Serilog.Core;
-    using Serilog.Events;
+    using global::Serilog;
+    using global::Serilog.Core;
+    using global::Serilog.Events;
 
     public class CallerEnricher : ILogEventEnricher
     {

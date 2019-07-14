@@ -1,13 +1,10 @@
-using System;
 using Xunit;
 
 namespace Pentagon.Extensions.Logging.Tests
 {
     using System.IO;
     using System.Text;
-    using ColoredConsole;
     using Exceptions;
-    using Microsoft.Extensions.Logging;
     using Serilog;
     using Serilog.Core;
     using Serilog.Events;
@@ -34,9 +31,9 @@ namespace Pentagon.Extensions.Logging.Tests
         [Fact]
         public void Test2()
         {
-            Log.Logger = new LoggerConfiguration()
-                         .MinimumLevel.Verbose()
-                         .Enrich.WithCaller()
+            Log.Logger = LoggerCallerEnrichmentConfiguration.WithCaller(new LoggerConfiguration()
+                                            .MinimumLevel.Verbose()
+                                            .Enrich)
                          .Enrich.WithDemystifiedException()
                          .WriteTo.Sink(new Sink(_outputHelper, new NewLineOffsetFormatter()))
                     .CreateLogger();
@@ -68,28 +65,6 @@ namespace Pentagon.Extensions.Logging.Tests
                 }
 
                 _outputHelper.WriteLine(original.ToString());
-            }
-        }
-    }
-
-    class Foo
-    {
-
-        public void DoDoing(int mos, string nos)
-        {
-            var log = new LoggerFactory(new[]
-                                        {
-                                                new ColoredConsoleLoggerProvider(new ColoredConsoleLoggerConfiguration
-                                                                                 { }),
-                                        }).CreateLogger("Foo");
-
-            using (log.LogMethod(input: new
-            {
-                mos,
-                nos
-            }))
-            {
-                Console.WriteLine(nos);
             }
         }
     }

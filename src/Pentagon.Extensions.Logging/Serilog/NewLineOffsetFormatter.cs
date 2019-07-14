@@ -1,12 +1,12 @@
-﻿namespace Pentagon.Extensions.Logging {
+﻿namespace Pentagon.Extensions.Logging.Serilog {
     using System;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using global::Serilog.Events;
+    using global::Serilog.Formatting;
+    using global::Serilog.Formatting.Display;
     using JetBrains.Annotations;
-    using Serilog.Events;
-    using Serilog.Formatting;
-    using Serilog.Formatting.Display;
 
     [Obsolete("WIP")]
     public class NewLineOffsetFormatter : ITextFormatter

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pentagon.Extensions.Logging", "src\Pentagon.Extensions.Logging\Pentagon.Extensions.Logging.csproj", "{896D8DAF-5C37-4235-8657-E3D7F0E7221F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pentagon.Extensions.Logging.Tests", "test\Pentagon.Extensions.Logging.Tests\Pentagon.Extensions.Logging.Tests.csproj", "{EA4C0A8D-4413-4409-B02B-C4A347D228D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pentagon.Extensions.Logging.Tests", "test\Pentagon.Extensions.Logging.Tests\Pentagon.Extensions.Logging.Tests.csproj", "{EA4C0A8D-4413-4409-B02B-C4A347D228D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
