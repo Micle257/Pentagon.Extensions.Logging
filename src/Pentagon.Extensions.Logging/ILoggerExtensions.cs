@@ -18,9 +18,8 @@ namespace Pentagon.Extensions.Logging
         public static IDisposable LogMethod(this ILogger logger,
                                             object input = null,
                                             [CallerMemberName] string methodName = null,
-                                            [CallerFilePath] string typePath = null,
-                                            [CallerLineNumber] int lineNumber = 0) =>
-                MethodLogger.Log(logger, input, methodName, typePath, lineNumber);
+                                            [CallerFilePath] string typePath = null) =>
+                MethodLogger.Log(logger, input, methodName, typePath);
 
         /// <summary> Begins a logical operation scope with given data. Calls <see cref="ILogger.BeginScope{TState}" />. </summary>
         /// <param name="logger"> The logger. </param>
@@ -39,82 +38,5 @@ namespace Pentagon.Extensions.Logging
 
             return logger.BeginScope(data);
         }
-
-        public static void LogSource(
-                this ILogger logger,
-                LogLevel logLevel,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args) => logger.Log(logLevel, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogCriticalSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Critical, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogErrorSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Error, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogWarningSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Warning, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogInformationSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Information, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogDebugSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Debug, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
-
-        public static void LogTraceSource(
-                this ILogger logger,
-                string message,
-                EventId eventId = new EventId(),
-                Exception exception = null,
-                [CallerMemberName] string origin = "",
-                [CallerFilePath] string filePath = "",
-                [CallerLineNumber] int lineNumber = 0,
-                params object[] args)
-            => logger.Log(LogLevel.Trace, eventId, new object[] {origin, filePath, lineNumber, message}.Concat(args), exception, LoggerSourceFormatter.Format);
     }
 }
