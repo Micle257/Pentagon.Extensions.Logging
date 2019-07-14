@@ -30,9 +30,10 @@ namespace Pentagon.Extensions.Logging.Serilog
                 var method = stack.GetMethod();
 
                 if (method.DeclaringType.Assembly != typeof(Log).Assembly
-                    && method.DeclaringType.Name != nameof(Logger))
+                    && method.DeclaringType.Name != nameof(Logger)
+                    && method.DeclaringType.Name != "SerilogLogger")
                 {
-                    var caller = $"{method.DeclaringType.FullName}.{method.Name}({string.Join(separator: ", ", method.GetParameters().Select(pi => pi.ParameterType.FullName))})";
+                    var caller = $"{method.DeclaringType.FullName}.{method.Name}({method.GetParameters().Select(pi => pi.ParameterType.FullName).Aggregate((a,b) => $"{a}, {b}")})";
 
                     logEvent.AddPropertyIfAbsent(new LogEventProperty(name: "Caller", new ScalarValue(caller)));
 
