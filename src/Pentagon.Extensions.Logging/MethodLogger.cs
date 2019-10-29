@@ -15,23 +15,27 @@ namespace Pentagon.Extensions.Logging
     public class MethodLogger : IDisposable
     {
         readonly ILogger _logger;
-        readonly string _info;
+        readonly object _info;
         readonly string _methodName;
         readonly string _typePath;
         readonly Stopwatch _sw;
         readonly string _fileName;
         readonly Guid _trace;
-        readonly int _lineNumber;
+        readonly IDisposable _loggerScope;
 
-        MethodLogger(ILogger logger, string info, string methodName, string typePath, int lineNumber)
+        MethodLogger(ILogger logger, object info, string methodName, string typePath)
         {
             _logger = logger;
             _info = info;
             _methodName = methodName;
             _typePath = typePath;
-            _lineNumber = lineNumber;
             _fileName = Path.GetFileName(typePath);
             _trace = Guid.NewGuid();
+
+            if (StaticLoggingOptions.Options == 0)
+                return;
+
+            _loggerScope = _logger.InScope(("MethodName", _methodName), ("MethodTrace", _trace), ("MethodFilePath", _typePath), ("MethodInfo", info));
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
             {
@@ -40,29 +44,34 @@ namespace Pentagon.Extensions.Logging
             }
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Entry))
-                _logger.LogTraceSource($"Begin of method '{methodName}' in file '{_fileName}'{info}.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
+            {
+                _logger.LogTrace(message: "Begin of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
+            }
         }
 
         public void Dispose()
         {
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
             {
-                _sw.Stop();
-                _logger.LogTraceSource($"Method '{_methodName}' finished in {_sw.Elapsed}.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
+                _sw?.Stop();
+                _logger.LogTrace(message: "Method '{MethodName}' finished in {TimeElapsed}.", _methodName, _sw.Elapsed);
             }
 
-            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Exit))
-                _logger.LogTraceSource($"End of method '{_methodName}' in file '{_fileName}'.", default, null, _methodName, _typePath, _lineNumber, $"{{ML TraceID: {_trace}}}");
+            if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Exit) && !StaticLoggingOptions.Options.HasFlag(MethodLogOptions.ExecutionTime))
+                _logger.LogTrace(message: "End of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
+
+            _loggerScope?.Dispose();
         }
 
         /// <summary> Log method entry </summary>
+        /// <param name="logger"> The logger. </param>
+        /// <param name="info"> The information. </param>
         /// <param name="methodName"> The name of the method being logged </param>
-        /// <param name="options"> The log options </param>
-        /// <returns> A disposable object or none if logging is disabled </returns>
+        /// <param name="typePath"> The type path. </param>
+        /// <returns> A disposable object or none if logging is disabled. </returns>
         public static IDisposable Log(ILogger logger,
-                                      string info = null,
+                                      object info = null,
                                       [CallerMemberName] string methodName = null,
-                                      [CallerFilePath] string typePath = null,
-                                      [CallerLineNumber] int lineNumber = 0) => new MethodLogger(logger, info, methodName, typePath, lineNumber);
+                                      [CallerFilePath] string typePath = null) => new MethodLogger(logger, info, methodName, typePath);
     }
 }

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assembly name="Pentagon.Extensions.Logging">
+  <member name="M:Pentagon.Extensions.Logging.LoggerExtensions.InScope(Microsoft.Extensions.Logging.ILogger,System.ValueTuple{System.String,System.Object}[])">
+    <parameter name="logger">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="items">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+</assembly>
