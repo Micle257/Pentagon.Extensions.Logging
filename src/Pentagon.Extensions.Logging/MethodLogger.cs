@@ -44,7 +44,9 @@ namespace Pentagon.Extensions.Logging
             }
 
             if (StaticLoggingOptions.Options.HasFlag(MethodLogOptions.Entry))
+            {
                 _logger.LogTrace(message: "Begin of method '{MethodName}' in file '{FileName}'.", _methodName, _fileName);
+            }
         }
 
         public void Dispose()

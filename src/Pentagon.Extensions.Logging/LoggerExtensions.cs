@@ -13,8 +13,17 @@ namespace Pentagon.Extensions.Logging
     using Microsoft.Extensions.Logging;
 
     /// <summary> Provides extension methods for <see cref="ILogger" />. </summary>
-    public static class ILoggerExtensions
+    public static class LoggerExtensions
     {
+        /// <summary>
+        /// Logs the method.
+        /// </summary>
+        /// <remarks>Should be called as first line in method and disposed as last line in method.</remarks>
+        /// <param name="logger">The logger.</param>
+        /// <param name="input">The input.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="typePath">The type path.</param>
+        /// <returns>An <see cref="IDisposable"/>.</returns>
         public static IDisposable LogMethod(this ILogger logger,
                                             object input = null,
                                             [CallerMemberName] string methodName = null,

@@ -8,20 +8,23 @@ namespace Pentagon.Extensions.Logging
 {
     using System;
 
-    /// <summary> Options used when logging a method </summary>
+    /// <summary> Options used when logging a method. </summary>
     [Flags]
     public enum MethodLogOptions
     {
-        /// <summary> Log entry into the method </summary>
+        /// <summary> Disable method logging. </summary>
+        None = 0,
+
+        /// <summary> Log entry into the method. </summary>
         Entry = 0x01,
 
-        /// <summary> Log exit from the method </summary>
+        /// <summary> Log exit from the method. </summary>
         Exit = 0x02,
 
-        /// <summary> Log the execution time of the method </summary>
+        /// <summary> Log the execution time of the method. </summary>
         ExecutionTime = 0x04,
 
-        /// <summary> Log all data </summary>
+        /// <summary> Log all data. </summary>
         All = 0xFF
     }
 }

@@ -10,13 +10,14 @@ namespace Pentagon.Extensions.Logging.Tests
     using Microsoft.Extensions.Logging;
     using Moq;
     using Xunit;
+    using LoggerExtensions = Logging.LoggerExtensions;
 
     public class ILoggerExtensionsTests
     {
         [Fact]
         public void InScope_FirstArgumentIsNull_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => ILoggerExtensions.InScope(null, Array.Empty<(string key, object value)>()));
+            Assert.Throws<ArgumentNullException>(() => LoggerExtensions.InScope(null, Array.Empty<(string key, object value)>()));
         }
 
         [Fact]
