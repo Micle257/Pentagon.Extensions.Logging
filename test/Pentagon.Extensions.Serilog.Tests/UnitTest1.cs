@@ -7,8 +7,8 @@
 namespace Pentagon.Extensions.Logging.Tests
 {
     using System.IO;
+    using System.Security.Cryptography;
     using System.Text;
-    using Exceptions;
     using global::Serilog;
     using global::Serilog.Core;
     using global::Serilog.Events;
@@ -39,9 +39,9 @@ namespace Pentagon.Extensions.Logging.Tests
         {
             Log.Logger = new LoggerConfiguration()
                          .MinimumLevel.Verbose()
-                         .Enrich.WithCaller()
-                         .Enrich.WithDemystifiedException()
-                         .WriteTo.Sink(new Sink(_outputHelper, new NewLineOffsetFormatter()))
+                         //.Enrich.WithCaller()
+                         //.Enrich.WithDemystifiedException()
+                         //.WriteTo.Sink(new Sink(_outputHelper, new NewLineOffsetFormatter()))
                          .CreateLogger();
 
             Log.Debug(messageTemplate: "test\ndsa\nqe");

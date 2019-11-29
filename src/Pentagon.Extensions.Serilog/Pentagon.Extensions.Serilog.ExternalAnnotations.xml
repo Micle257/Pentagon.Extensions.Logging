@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assembly name="Pentagon.Extensions.Serilog">
+  <member name="M:Serilog.Enrichers.Assembly.AssemblyNameLoggerConfigurationExtensions.WithAssemblyName(Serilog.Configuration.LoggerEnrichmentConfiguration)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="enrichmentConfiguration">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Serilog.Enrichers.Assembly.AssemblyNameLoggerConfigurationExtensions.WithAssemblyVersion(Serilog.Configuration.LoggerEnrichmentConfiguration)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="enrichmentConfiguration">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  <member name="M:Serilog.Enrichers.Assembly.AssemblyNameLoggerConfigurationExtensions.WithProductVersion(Serilog.Configuration.LoggerEnrichmentConfiguration)">
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="enrichmentConfiguration">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+</assembly>
