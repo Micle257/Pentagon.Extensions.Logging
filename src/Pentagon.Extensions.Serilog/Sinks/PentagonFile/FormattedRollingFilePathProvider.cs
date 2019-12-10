@@ -107,6 +107,13 @@ namespace Serilog.Sinks.PentagonFile
                 var indexStart = lastFormat.IndexOf(value: "yyyy");
                 var indexEnd   = lastFormat.IndexOf(value: ".");
 
+                if (indexEnd - indexStart > lastPath.Length)
+                {
+                    periodStart = null;
+
+                    return false;
+                }
+
                 var date = lastPath.Substring(startIndex: indexStart, indexEnd - indexStart);
 
                 if (DateTime.TryParse(s: date, out var periodStartValue))
